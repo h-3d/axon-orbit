@@ -48,7 +48,7 @@ window.addEventListener('resize', () => {
 const clock = new THREE.Clock();
 const controls = new FlyControls( camera, renderer.domElement );
 controls.movementSpeed = 200;
-controls.rollSpeed = 0.8;
+controls.rollSpeed = 0.6;
 controls.dragToLook = true;
 controls.autoForward = false;
 
