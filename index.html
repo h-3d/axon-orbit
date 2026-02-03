@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tiny5&display=swap');
+
+        body {
+            background-color: black;
+        }
+
+        #coordinates {
+            font-family: "Tiny5", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            color: white;
+            font-size: 300%;
+            position: fixed;
+            left: 0;
+            margin: 20px;
+            margin-top: 10px;
+            visibility: hidden;
+        }
+
+        #hp {
+            font-family: "Tiny5", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            color: white;
+            font-size: 300%;
+            position: fixed;
+            right: 0;
+            margin: 20px;
+            margin-top: 10px;
+            visibility: hidden;
+        }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script src='./perlin.js' defer></script>
+    <script type="module" src="./index.js"></script>
+    <title>Axon-Orbit</title>
+</head>
+<body>
+    <div id="coordinates"></div>
+    <div id="hp"></div>
+</body>
+</html>
