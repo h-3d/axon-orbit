@@ -2,6 +2,8 @@
 
 Decentralized 3D space shooter built with [Three.js](https://threejs.org/) & [Trystero](https://oxism.com/trystero/). 🚀
 
+🎮 [Play the Live Demo](https://h-3d.github.io/axon-orbit/)
+
 ## Features
 
 - Browser-based 3D game
