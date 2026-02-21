@@ -7,7 +7,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { joinRoom } from 'https://esm.run/trystero/supabase';
+import { joinRoom } from 'https://esm.run/trystero';
 
 document.body.style.margin = 0;
 
@@ -92,8 +92,11 @@ const response = await fetch("https://h-3d.metered.live/api/v1/turn/credentials?
 const iceServers = await response.json();
 
 const config = {
-    appId: 'https://xejqytnwizsblyszwnhi.supabase.co',
-    supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhlanF5dG53aXpzYmx5c3p3bmhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4NjY2MjUsImV4cCI6MjA4NjQ0MjYyNX0.2x-20Kq38rhDOFEZrOnUKUkqyDYMDuKdVMfMPF-q2NY',
+    appId: 'axon-orbit',
+    relayUrls: [
+        'wss://relay.snort.social',
+        'wss://nos.lol'
+    ],
     turnConfig: iceServers
 };
 
