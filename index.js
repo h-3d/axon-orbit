@@ -102,25 +102,25 @@ const config = {
 
 const room = joinRoom(config, 'axon-orbit');
 
-const [sendPosition, getPosition] = room.makeAction('position');
-const [sendRotation, getRotation] = room.makeAction('rotation');
+const position = room.makeAction('position');
+const rotation = room.makeAction('rotation');
 
-const [sendSynchronize, getSynchronize] = room.makeAction('synchronize');
+const synchronize = room.makeAction('synchronize');
 const syncedPositionPeers = new Set();
 const syncedRotationPeers = new Set();
 
-const [sendLaser, getLaser] = room.makeAction('laser');
+const laser = room.makeAction('laser');
 
-getSynchronize((_, peerId) => {
-    sendPosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z }, peerId);
-    sendRotation({ x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w }, peerId);
-});
+synchronize.onMessage = (_, {peerId}) => {
+    position.send({ x: camera.position.x, y: camera.position.y, z: camera.position.z }, peerId);
+    rotation.send({ x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w }, peerId);
+};
 
 const offset = 26.9920000433922;
 
 const peers = new Set();
 
-room.onPeerJoin((peerId) => {
+room.onPeerJoin = peerId => {
     peers.add(peerId);
     loader.load('./low_poly_space_ship.fbx', (object) => {
         const parent = new THREE.Object3D();
@@ -138,38 +138,38 @@ room.onPeerJoin((peerId) => {
                 return;
             }
 
-            sendSynchronize(null, peerId);
+            synchronize.send(null, {peerId});
             attempts++;
         }, 200);
 
         scene.add(parent);
     });
-});
+};
 
-room.onPeerLeave((peerId) => {
+room.onPeerLeave = peerId => {
     peers.delete(peerId);
     syncedPositionPeers.delete(peerId);
     syncedRotationPeers.delete(peerId);
     scene.remove(scene.getObjectByName(peerId));
-});
+};
 
-getPosition((data, peerId) => {
+position.onMessage = (data, {peerId}) => {
     const player = scene.getObjectByName(peerId);
     if (player) {
         player.position.set(data.x, data.y, data.z);
         player.visible = true;
         syncedPositionPeers.add(peerId);
     }
-});
+};
 
-getRotation((data, peerId) => {
+rotation.onMessage = (data, {peerId}) => {
     const player = scene.getObjectByName(peerId);
     if (player) {
         player.quaternion.set(data.x, data.y, data.z, data.w);
         player.visible = true;
         syncedRotationPeers.add(peerId);
     }
-});
+};
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -212,15 +212,15 @@ function receiveLaser(position, quaternion) {
     lasers.push(laser);
 }
 
-getLaser((data) => {
+laser.onMessage = (data) => {
     receiveLaser(data.position, data.quaternion);
-});
+};
 
 async function laserDelay() {
     if(!isProcessing) {
         isProcessing = true;
         shootLaser(camera.position, camera.quaternion);
-        sendLaser({ position: { x: camera.position.x, y: camera.position.y, z: camera.position.z }, quaternion: { x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w }});
+        laser.send({ position: { x: camera.position.x, y: camera.position.y, z: camera.position.z }, quaternion: { x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w }});
         await sleep(200);
         isProcessing = false;
     }
@@ -321,12 +321,12 @@ function animate() {
     });
 
     if (!lastCameraPosition.equals(camera.position)) {
-        sendPosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z });
+        position.send({ x: camera.position.x, y: camera.position.y, z: camera.position.z });
         lastCameraPosition.copy(camera.position);
         document.getElementById('coordinates').textContent = `x: ${Math.round(camera.position.x)} y: ${Math.round(camera.position.y)} z: ${Math.round(camera.position.z)}`;
     }
     if (!lastCameraQuaternion.equals(camera.quaternion)) {
-        sendRotation({ x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w });
+        rotation.send({ x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w });
         lastCameraQuaternion.copy(camera.quaternion);
     }
 }
