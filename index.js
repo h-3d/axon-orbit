@@ -9,8 +9,6 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { joinRoom } from 'https://esm.run/trystero';
 
-document.body.style.margin = 0;
-
 let health = 200;
 document.getElementById('hp').textContent = `${health}hp`;
 
