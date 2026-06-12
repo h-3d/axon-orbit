@@ -210,15 +210,18 @@ function receiveLaser(position, quaternion) {
     lasers.push(laser);
 }
 
-laser.onMessage = (data) => {
-    receiveLaser(data.position, data.quaternion);
+laser.onMessage = (_, {peerId}) => {
+    const player = scene.getObjectByName(peerId);
+    if (player) {
+        receiveLaser(player.position, player.quaternion);
+    }
 };
 
 async function laserDelay() {
     if(!isProcessing) {
         isProcessing = true;
         shootLaser(camera.position, camera.quaternion);
-        laser.send({ position: { x: camera.position.x, y: camera.position.y, z: camera.position.z }, quaternion: { x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w: camera.quaternion.w }});
+        laser.send(null);
         await sleep(200);
         isProcessing = false;
     }
