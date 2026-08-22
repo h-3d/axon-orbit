@@ -1,5 +1,8 @@
 # axon-orbit
 
+> [!WARNING]
+> **Critical Issue:** Multiplayer broken due to relay failure
+
 Decentralized 3D space shooter built with [Three.js](https://threejs.org/) & [Trystero](https://trystero.dev/). 🚀
 
 🎮 [Play the Live Demo](https://h-3d.github.io/axon-orbit/)
